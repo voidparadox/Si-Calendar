@@ -1,0 +1,12 @@
+Using the Si-Calendar:
+
+• Copy the "/Calendar" folder into your project.
+• Import the main controller CalendarViewController.
+• Push the controller onto your navigation controller's stack.
+• Set the CalendarViewController's delegate.
+
+• Date changes and/or clear messages will be sent to your delegate:
+- (void)calendarViewController:(CalendarViewController *)aCalendarViewController dateDidChange:(NSDate *)aDate
+
+
+Check out the CalendarAppDelegate for an example of use!
