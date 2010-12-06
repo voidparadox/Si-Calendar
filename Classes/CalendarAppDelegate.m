@@ -12,37 +12,29 @@
 @implementation CalendarAppDelegate
 
 @synthesize window;
-@synthesize calendarController;
-@synthesize navigationController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
-	CalendarViewController *controller = [[CalendarViewController alloc] initWithNibName:nil bundle:nil];
-	UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:controller];
-	controller.calendarViewControllerDelegate = self;
+	UINavigationController *navigation = [[UINavigationController alloc] init];
+	CalendarViewController *controller = [[CalendarViewController alloc] init];
+	[navigation pushViewController:controller animated:NO];
+	[controller setCalendarViewControllerDelegate:self];
 	
-	[window addSubview:navigation.view];
+    // Override point for customization after app launch    
+    [window addSubview:navigation.view];
     [window makeKeyAndVisible];
-	
-	self.calendarController = [controller autorelease];
-	self.navigationController = [navigation autorelease];
 	
 	return YES;
 }
 
+
 - (void)calendarViewController:(CalendarViewController *)aCalendarViewController dateDidChange:(NSDate *)aDate {
-	
-	// Pop calendar off the navigation stack
-	
-	// Use date deleted. Nil returned for cleared date.
-	
+	NSLog(@"Date set to: %@", aDate);
 }
 
+
 - (void)dealloc {
-	self.calendarController = nil;
-	self.navigationController = nil;
-	
     [window release];
     [super dealloc];
 }

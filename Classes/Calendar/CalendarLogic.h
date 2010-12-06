@@ -18,14 +18,14 @@
 @property (nonatomic, assign) id <CalendarLogicDelegate> calendarLogicDelegate;
 @property (nonatomic, retain) NSDate *referenceDate;
 
-- (id)initWithDelegate:(id <CalendarLogicDelegate>)aDelegate;
+- (id)initWithDelegate:(id <CalendarLogicDelegate>)aDelegate referenceDate:(NSDate *)aDate;
 
-- (NSDate *)dateForWeekday:(NSInteger)aWeekday 
++ (NSDate *)dateForToday;
++ (NSDate *)dateForWeekday:(NSInteger)aWeekday 
 					onWeek:(NSInteger)aWeek 
 				   ofMonth:(NSInteger)aMonth 
 					ofYear:(NSInteger)aYear;
-
-- (NSDate *)dateForWeekday:(NSInteger)aWeekday onWeek:(NSInteger)aWeek;
++ (NSDate *)dateForWeekday:(NSInteger)aWeekday onWeek:(NSInteger)aWeek referenceDate:(NSDate *)aReferenceDate;
 
 - (NSInteger)indexOfCalendarDate:(NSDate *)aDate;
 - (NSInteger)distanceOfDateFromCurrentMonth:(NSDate *)aDate;
