@@ -18,6 +18,7 @@
 	
 	NSInteger numberOfDaysInWeek;
 	NSInteger selectedButton;
+	NSDate *selectedDate;
 }
 
 @property (nonatomic, retain) CalendarLogic *calendarLogic;
@@ -26,6 +27,8 @@
 
 @property (nonatomic) NSInteger numberOfDaysInWeek;
 @property (nonatomic) NSInteger selectedButton;
+@property (nonatomic, retain) NSDate *selectedDate;
+
 
 - (id)initWithFrame:(CGRect)frame logic:(CalendarLogic *)aLogic;
 

@@ -29,6 +29,7 @@
 	selectedDate = [aDate retain];
 	
 	[calendarLogic setReferenceDate:aDate];
+	[calendarView selectButtonForDate:aDate];
 }
 
 @synthesize leftButton;
@@ -42,9 +43,12 @@
 - (void)dealloc {
 	self.calendarViewControllerDelegate = nil;
 	
+	self.calendarLogic.calendarLogicDelegate = nil;
 	self.calendarLogic = nil;
+	
 	self.calendarView = nil;
 	self.calendarViewNew = nil;
+	
 	self.selectedDate = nil;
 	
 	self.leftButton = nil;
@@ -60,11 +64,7 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-		self.title = NSLocalizedString(@"Calendar", @"Calendar");
-		
-		CalendarLogic *aCalendarLogic = [[CalendarLogic alloc] initWithDelegate:self];
-		self.calendarLogic = aCalendarLogic;
-		[aCalendarLogic release];
+		// Init
     }
     return self;
 }
@@ -77,7 +77,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];	
 	
-	self.view.frame = CGRectMake(0, 0, 320, 324);
+	self.title = NSLocalizedString(@"Calendar", @"");
+	self.view.bounds = CGRectMake(0, 0, 320, 324);
+	self.view.clearsContextBeforeDrawing = NO;
+	self.view.opaque = YES;
+	self.view.clipsToBounds = NO;
+	
+	NSDate *aDate = selectedDate;
+	if (aDate == nil) {
+		aDate = [CalendarLogic dateForToday];
+	}
+	
+	CalendarLogic *aCalendarLogic = [[CalendarLogic alloc] initWithDelegate:self referenceDate:aDate];
+	self.calendarLogic = aCalendarLogic;
+	[aCalendarLogic release];
 	
 	UIBarButtonItem *aClearButton = [[UIBarButtonItem alloc] 
 									 initWithTitle:NSLocalizedString(@"Clear", @"") style:UIBarButtonItemStylePlain
@@ -115,8 +128,25 @@
 	[self.view addSubview:aRightButton];
 	self.rightButton = aRightButton;
 }
+- (void)viewDidUnload {
+	self.calendarLogic.calendarLogicDelegate = nil;
+	self.calendarLogic = nil;
+	
+	self.calendarView = nil;
+	self.calendarViewNew = nil;
+	
+	self.selectedDate = nil;
+	
+	self.leftButton = nil;
+	self.rightButton = nil;
+}
+
 - (CGSize)contentSizeForViewInPopoverView {
-	return self.view.frame.size;
+	return CGSizeMake(320, 324);
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Overriden to allow any orientation.
+    return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad || interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 
@@ -126,6 +156,10 @@
 
 - (void)actionClearDate:(id)sender {
 	self.selectedDate = nil;
+	[calendarView selectButtonForDate:nil];
+	
+	// Delegate called later.
+	//[calendarViewControllerDelegate calendarViewController:self dateDidChange:nil];
 }
 
 

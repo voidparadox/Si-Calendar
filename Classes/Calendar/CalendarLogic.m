@@ -57,12 +57,13 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id)initWithDelegate:(id <CalendarLogicDelegate>)aDelegate {
+- (id)initWithDelegate:(id <CalendarLogicDelegate>)aDelegate referenceDate:(NSDate *)aDate {
     if ((self = [super init])) {
         // Initialization code
 		self.calendarLogicDelegate = aDelegate;
-
-		NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:[NSDate date]];	
+		
+		[referenceDate autorelease];	
+		NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:aDate];	
 		referenceDate = [[[NSCalendar currentCalendar] dateFromComponents:components] retain];
     }
     return self;
@@ -73,8 +74,16 @@
 #pragma mark -
 #pragma mark Date computations
 
-- (NSDate *)dateForWeekday:(NSInteger)aWeekday onWeek:(NSInteger)aWeek {
-	NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:referenceDate];
++ (NSDate *)dateForToday {
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSDateComponents *components = [calendar components:(NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:[NSDate date]];	
+	NSDate *todayDate = [calendar dateFromComponents:components];
+	
+	return todayDate;
+}
+
++ (NSDate *)dateForWeekday:(NSInteger)aWeekday onWeek:(NSInteger)aWeek referenceDate:(NSDate *)aReferenceDate {
+	NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:aReferenceDate];
 	
 	NSInteger aMonth = [components month];
 	NSInteger aYear = [components year];
@@ -84,7 +93,7 @@
 						ofMonth:(NSInteger)aMonth 
 						 ofYear:(NSInteger)aYear];
 }
-- (NSDate *)dateForWeekday:(NSInteger)aWeekday 
++ (NSDate *)dateForWeekday:(NSInteger)aWeekday 
 					onWeek:(NSInteger)aWeek 
 				   ofMonth:(NSInteger)aMonth 
 					ofYear:(NSInteger)aYear 
@@ -137,7 +146,7 @@
 		firstWeek = firstWeek - 52;
 	}
 	NSInteger weekday = [components weekday];
-	if (weekday < [calendar firstWeekday]) {
+	if (weekday < (NSInteger)[calendar firstWeekday]) {
 		weekday = weekday + 7;
 	}
 	
@@ -151,7 +160,7 @@
 	NSInteger distance = 0;
 	NSCalendar *calendar = [NSCalendar currentCalendar];
 	
-	NSDateComponents *monthComponents = [calendar components:(NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:self.referenceDate];
+	NSDateComponents *monthComponents = [calendar components:(NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:referenceDate];
 	NSDate *firstDayInMonth = [calendar dateFromComponents:monthComponents];
 	[monthComponents setDay:[calendar rangeOfUnit:NSDayCalendarUnit
 										   inUnit:NSMonthCalendarUnit
