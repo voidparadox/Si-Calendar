@@ -255,6 +255,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Calendar_Prefix.pch;
 				INFOPLIST_FILE = "Calendar-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = Calendar;
 			};
 			name = Debug;
@@ -267,6 +268,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Calendar_Prefix.pch;
 				INFOPLIST_FILE = "Calendar-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = Calendar;
 				VALIDATE_PRODUCT = YES;
 			};
